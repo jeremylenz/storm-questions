@@ -16,11 +16,12 @@ import {
 
 class Diagram extends React.Component {
 
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
 
 		this.state = { loading:true,
-									 engine: null }
+									 engine: null,
+								 	}
 	}
 
 	componentDidMount() {
@@ -109,35 +110,63 @@ class Diagram extends React.Component {
 
 	}
 
-	addNode = () => {
+	componentWillReceiveProps(newProps) {
+		if(newProps.incomingNode !== null) {
+			this.addNode(newProps.incomingNode)
+		}
+	}
+
+	addNode = (node) => {
 		let currentEngine = this.state.engine
 		let currentModel = currentEngine.getDiagramModel()
 
-		var newNode = new DefaultNodeModel("New Node", "rgb(0,64,255)")
-		newNode.x = 400;
-		newNode.y = 150;
-		var port5 = newNode.addPort(new DefaultPortModel(true, "in"))
-		var port4 = newNode.addPort(new DefaultPortModel(false, "Maybe"))
-		var port5 = newNode.addPort(new DefaultPortModel(false, "Definitely"))
-		var port6 = newNode.addPort(new DefaultPortModel(false, "Totally"))
-
-		currentModel.addNode(newNode)
+		currentModel.addNode(node)
 		currentEngine.setDiagramModel(currentModel)
 
 		this.setState( { engine: currentEngine })
+	}
+
+	onDrop = (event) => {
+
+		let currentEngine = this.state.engine
+		let currentModel = currentEngine.getDiagramModel()
+
+		var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
+		var nodesCount = Object.keys(currentModel.getNodes()).length // GOTTA LOVE JAVASCRIPT [eye-roll-emoji]
+
+		var node = null;
+		if (data.type === "in") {
+			node = new DefaultNodeModel("Node " + (nodesCount + 1), "rgb(192,255,0)");
+			node.addPort(new DefaultPortModel(true, "in-1", "In"));
+		} else {
+			node = new DefaultNodeModel("Node " + (nodesCount + 1), "rgb(0,192,255)");
+			node.addPort(new DefaultPortModel(false, "out-1", "Out"));
+		}
+		var points = currentEngine.getRelativeMousePoint(event);
+		node.x = points.x;
+		node.y = points.y;
+		currentModel.addNode(node);
+		// this.forceUpdate();
+		currentEngine.setDiagramModel(currentModel)
+		this.setState( {engine: currentEngine })
+
+
 	}
 
   render () {
 
 
 		return (
-			<div className='put-it-in-a-div'>
+			<div className='canvas-container'
+				onDrop={event => this.onDrop(event)}
+				onDragOver={event => {
+							event.preventDefault();
+						}
+					}>
 			{(this.state.loading === false) &&
-				<div>
 
-				<button onClick={this.addNode}>Add Node</button>
-				<DiagramWidget diagramEngine={this.state.engine} />;
-			</div>
+					<DiagramWidget diagramEngine={this.state.engine} />
+
 			}
 			{this.state.loading &&
 				'loading'
@@ -145,7 +174,6 @@ class Diagram extends React.Component {
 		</div>
 		)
     }
-
 } // end of class
 
 export default Diagram;
