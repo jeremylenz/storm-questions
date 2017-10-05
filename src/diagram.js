@@ -61,11 +61,11 @@ class Diagram extends React.Component {
 		var port4 = node3.addPort(new DefaultPortModel(true, "in-2"))
 		node3.x = 600;
 		node3.y = 150;
-		var link2 = new LinkModel();
-		link2.setSourcePort(port3);
-		link2.setTargetPort(port4);
+		// var link2 = new LinkModel();
+		// link2.setSourcePort(port3);
+		// link2.setTargetPort(port4);
 		model.addNode(node3);
-		model.addLink(link2);
+		// model.addLink(link2);
 
 		node1.addListener({
       entityRemoved: (node) => {
@@ -78,6 +78,18 @@ class Diagram extends React.Component {
 		model.addListener({
       linksUpdated:(entity, isAdded) => {
         console.log(isAdded ? 'added' : 'removed', entity)
+				if(isAdded === false) {
+					return null
+				}
+				let linksCount = Object.keys(entity.sourcePort.links).length
+				if(linksCount > 1) {
+					console.log('found existing link; removing')
+					entity.remove()
+				}
+				// if(entity.sourcePort)
+
+
+
       },
       nodesUpdated: (entity, isAdded) => {
         console.log(isAdded ? 'added' : 'removed', entity)
@@ -88,9 +100,26 @@ class Diagram extends React.Component {
 		//5) load model into engine
 		engine.setDiagramModel(model);
 
-		//!------------- SERIALIZING ------------------
 
-		var str = JSON.stringify(model.serializeDiagram());
+
+		this.setState( { engine: engine,
+		 									loading: false })
+
+	}
+
+	componentWillReceiveProps(newProps) {
+		if(newProps.incomingNode !== null) {
+			this.addNode(newProps.incomingNode)
+		}
+	}
+
+	serialize = (model) => {
+		return JSON.stringify(model.serializeDiagram());
+	}
+
+	deSerialize = (str) => {
+
+		let engine = this.state.engine;
 
 		//!------------- DESERIALIZING ----------------
 
@@ -104,16 +133,7 @@ class Diagram extends React.Component {
 		// console.log(str)
 		model2.deSerializeDiagram(JSON.parse(str), engine);
 		engine.setDiagramModel(model2);
-
-		this.setState( { engine: engine,
-		 									loading: false })
-
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.incomingNode !== null) {
-			this.addNode(newProps.incomingNode)
-		}
+		return engine;
 	}
 
 	addNode = (node) => {
@@ -132,7 +152,7 @@ class Diagram extends React.Component {
 		let currentModel = currentEngine.getDiagramModel()
 
 		var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-		var nodesCount = Object.keys(currentModel.getNodes()).length // GOTTA LOVE JAVASCRIPT [eye-roll-emoji]
+		var nodesCount = Object.keys(currentModel.getNodes()).length // GOTTA LOVE JAVASCRIPT [eye-roll-emoji]  #on another note I can see why they used lodash
 
 		var node = null;
 		if (data.type === "in") {
@@ -145,6 +165,9 @@ class Diagram extends React.Component {
 		var points = currentEngine.getRelativeMousePoint(event);
 		node.x = points.x;
 		node.y = points.y;
+
+
+
 		currentModel.addNode(node);
 		// this.forceUpdate();
 		currentEngine.setDiagramModel(currentModel)

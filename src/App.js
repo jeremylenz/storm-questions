@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Diagram from './diagram'
 import BodyWidget from './Body'
 import './App.css';
 

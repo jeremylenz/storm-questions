@@ -18,10 +18,10 @@ class BodyWidget extends React.Component {
     var newNode = new DefaultNodeModel("New Node", "rgb(0,64,255)")
 		newNode.x = 400;
 		newNode.y = 150;
-		var port5 = newNode.addPort(new DefaultPortModel(true, "in"))
-		var port4 = newNode.addPort(new DefaultPortModel(false, "Maybe"))
-		var port5 = newNode.addPort(new DefaultPortModel(false, "Definitely"))
-		var port6 = newNode.addPort(new DefaultPortModel(false, "Totally"))
+		newNode.addPort(new DefaultPortModel(true, "in"))
+		newNode.addPort(new DefaultPortModel(false, "Maybe"))
+		newNode.addPort(new DefaultPortModel(false, "Definitely"))
+		newNode.addPort(new DefaultPortModel(false, "Totally"))
 
     this.setState(
       {nodeToAdd: newNode}
