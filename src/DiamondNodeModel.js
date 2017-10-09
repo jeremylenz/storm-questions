@@ -1,5 +1,5 @@
 import { NodeModel } from 'storm-react-diagrams'
-import { DiamondPortModel } from './DiamondPortModel'
+import DiamondPortModel from './DiamondPortModel'
 
 class DiamondNodeModel extends NodeModel {
   constructor() {

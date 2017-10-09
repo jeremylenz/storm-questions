@@ -1,10 +1,11 @@
 import React from 'react'
+import { PortModel } from 'storm-react-diagrams'
 
-class DiamondPortModel extends React.Component {
+class DiamondPortModel extends PortModel {
 
-  constructor(position) {
-    super(position);
-    this.position = position;
+  constructor(pos) {
+    super(pos);
+    this.position = pos;
   }
 
   serialize () {
@@ -13,14 +14,12 @@ class DiamondPortModel extends React.Component {
     })
   }
 
-  deSerialize (data) {
+  deSerialize(data) {
     super.deSerialize(data)
     this.position = data.position
   }
 
-  render () {
 
-  }
 }
 
 export default DiamondPortModel;

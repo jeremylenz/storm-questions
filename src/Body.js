@@ -2,7 +2,8 @@ import React from 'react'
 import TrayWidget from './TrayWidget'
 import TrayItemWidget from './TrayItemWidget'
 import Diagram from './diagram'
-import { DefaultNodeModel, DefaultPortModel, DiamondNodeModel } from 'storm-react-diagrams'
+import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams'
+import DiamondNodeModel from './DiamondNodeModel.js'
 
 class BodyWidget extends React.Component {
 

@@ -13,7 +13,7 @@ import {
 	LinkInstanceFactory
 } from 'storm-react-diagrams';
 
-import { DiamondWidgetFactory } from './DiamondWidgetFactory.js'
+import DiamondWidgetFactory from './DiamondWidgetFactory.js'
 
 
 class Diagram extends React.Component {

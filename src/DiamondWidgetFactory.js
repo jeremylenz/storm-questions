@@ -1,6 +1,6 @@
 import React from 'react'
 import { NodeWidgetFactory } from 'storm-react-diagrams'
-import { DiamonNodeWidget } from './DiamondNodeWidget.js'
+import DiamonNodeWidget from './DiamondNodeWidget.js'
 
 class DiamondWidgetFactory extends NodeWidgetFactory {
   constructor () {
