@@ -13,6 +13,8 @@ import {
 	LinkInstanceFactory
 } from 'storm-react-diagrams';
 
+import { DiamondWidgetFactory } from './DiamondWidgetFactory.js'
+
 
 class Diagram extends React.Component {
 
@@ -29,6 +31,7 @@ class Diagram extends React.Component {
 		var engine = new DiagramEngine();
 		engine.registerNodeFactory(new DefaultNodeFactory());
 		engine.registerLinkFactory(new DefaultLinkFactory());
+		engine.registerNodeFactory(new DiamondWidgetFactory());
 
 		//2) setup the diagram model
 		var model = new DiagramModel();
@@ -86,8 +89,6 @@ class Diagram extends React.Component {
 					console.log('found existing link; removing')
 					entity.remove()
 				}
-				// if(entity.sourcePort)
-
 
 
       },
@@ -152,7 +153,7 @@ class Diagram extends React.Component {
 		let currentModel = currentEngine.getDiagramModel()
 
 		var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-		var nodesCount = Object.keys(currentModel.getNodes()).length // GOTTA LOVE JAVASCRIPT [eye-roll-emoji]  #on another note I can see why they used lodash
+		var nodesCount = Object.keys(currentModel.getNodes()).length
 
 		var node = null;
 		if (data.type === "in") {

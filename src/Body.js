@@ -2,7 +2,7 @@ import React from 'react'
 import TrayWidget from './TrayWidget'
 import TrayItemWidget from './TrayItemWidget'
 import Diagram from './diagram'
-import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams'
+import { DefaultNodeModel, DefaultPortModel, DiamondNodeModel } from 'storm-react-diagrams'
 
 class BodyWidget extends React.Component {
 
@@ -30,6 +30,17 @@ class BodyWidget extends React.Component {
 
   }
 
+  addDiamondNode = () => {
+    var newDiamond = new DiamondNodeModel();
+	newDiamond.x = 400;
+	newDiamond.y = 100;
+
+  this.setState(
+    {nodeToAdd: newDiamond}
+  )
+
+  }
+
 
 
   render () {
@@ -40,6 +51,7 @@ class BodyWidget extends React.Component {
   				<TrayItemWidget model={{ type: "in" }} name="Symptom A?" color="rgb(192,255,0)" />
   				<TrayItemWidget model={{ type: "out" }} name="Symptom B?" color="rgb(0,192,255)" />
           <button onClick={this.addNode}>Add Node</button>
+          <button onClick={this.addDiamondNode}>Add Diamond</button>
 
   			</TrayWidget>
         <Diagram incomingNode={this.state.nodeToAdd}/>
